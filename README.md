@@ -23,4 +23,4 @@ python main.py
 | 0.452 | 0.810 | 0.790 | 0.763 | 0.772 |
 
 ## Note
-PCNN and SAN **do not** share the same entity-aware embedding layer, and the `lambda` values for PCNN and SAN are 0.05 and 1.0 respectively (confirmed by the authors).
+PCNN and SAN **DO NOT** share the same entity-aware embedding layer, and the `lambda` values for PCNN and SAN are 0.05 and 1.0 respectively (confirmed by the authors).
