@@ -17,5 +17,6 @@ python main.py
 ```
 
 ## Experimental Result
+
 | P@100  | P@200 | P@300 | Mean | AUC |
-| -- | -- | -- | -- | -- | -- | 
+| ------ | ----- | ----- | ---- | --- |
