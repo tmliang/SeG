@@ -9,7 +9,7 @@ A pytorch implementation of the paper: [Self-Attention Enhanced Selective Gate w
 * scikit_learn==0.23.2
 
 ## Data
-Download the dataset from [here](https://github.com/thunlp/HNRE/tree/master/raw_data), and unzip under `./data/`.
+Download the dataset from [here](https://github.com/thunlp/HNRE/tree/master/raw_data), and unzip it under `./data/`.
 
 ## Train and Test
 ```
