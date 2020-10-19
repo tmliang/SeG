@@ -10,14 +10,6 @@ from data_loader import data_loader
 from config import config
 from utils import AverageMeter
 
-def setup_seed(seed):
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-    np.random.seed(seed)
-    random.seed(seed)
-    torch.backends.cudnn.deterministic = True
-#setup_seed(2021)
-
 def train(train_loader, test_loader, opt):
     model = SeG(train_loader.dataset.vec_save_dir, train_loader.dataset.rel_num(),
                 lambda_pcnn=opt['lambda_pcnn'], lambda_san=opt['lambda_san'])
