@@ -9,10 +9,10 @@ A pytorch implementation of the paper: [Self-Attention Enhanced Selective Gate w
 * scikit_learn==0.23.2
 
 ## Data
-Download the dataset from [here](https://github.com/thunlp/HNRE/tree/master/raw_data), and unzip under './data/'.
+Download the dataset from [here](https://github.com/thunlp/HNRE/tree/master/raw_data), and unzip under `./data/`.
 
 ## Train and Test
-```python
+```
 python main.py
 ```
 
@@ -23,4 +23,4 @@ python main.py
 | --- | ------ | ----- | ----- | ---- |
 
 ## Note
-PCNN and SAN **do not** share the same entity-aware embedding layer, and the 'lambda' values for PCNN and SAN are 0.05 and 1.0 respectively (confirmed by the authors).
+PCNN and SAN **do not** share the same entity-aware embedding layer, and the `lambda` values for PCNN and SAN are 0.05 and 1.0 respectively (confirmed by the authors).
