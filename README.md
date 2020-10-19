@@ -12,7 +12,6 @@ A pytorch implementation of the paper: [Self-Attention Enhanced Selective Gate w
 Download the dataset from [here](https://github.com/thunlp/HNRE/tree/master/raw_data), and unzip under './data/'.
 
 ## Train and Test
-
   python main.py
   
  
