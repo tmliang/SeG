@@ -15,4 +15,8 @@ Download the dataset from [here](https://github.com/thunlp/HNRE/tree/master/raw_
 ```
 python main.py
 ```
- 
+
+## Experimental Result
+| P@100  | P@200 | P@300 | Mean | AUC |
+| -- | -- | -- | -- | -- | -- | 
+| Content Cell  | Content Cell  |
