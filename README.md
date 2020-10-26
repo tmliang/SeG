@@ -22,8 +22,9 @@ The results show that the main contribution comes from the entity-aware embeddin
 
 |Model| P@100  | P@200 | P@300 | Mean | AUC |
 | :- | :----: | :---: | :---: | :--: | :-: |
-| SeG | 0.810 | 0.790 | 0.763 | 0.772 | 0.452 |
-| PCNN+ATT+Ent | 0.810 | 0.790 | 0.763 | 0.772 | 0.452 |
+| SeG | 81.0 | 79.0 | 76.3 | 77.2 | 45.2 |
+| PCNN+ATT+Ent | 78.0 | 72.5 | 70.3 | 71.1 | 44.6 |
+| CNN+ATT+Ent | 77.0 | 70.0 | 65.7 | 67.1 | 43.7 |
 
 ## Note
 PCNN and SAN **DO NOT** share the same entity-aware embedding layer, and the `lambda` values for PCNN and SAN are 0.05 and 1.0 respectively (confirmed by the authors).
