@@ -18,7 +18,7 @@ python main.py
 
 ## Experimental Result
 
-The results show that the main contribution comes from the entity-aware embedding.
+The results show that the main contribution comes from the entity-aware embeddings.
 
 |Model| P@100  | P@200 | P@300 | Mean | AUC |
 | :- | :----: | :---: | :---: | :--: | :-: |
