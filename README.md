@@ -21,7 +21,7 @@ python main.py
 |Model| P@100  | P@200 | P@300 | Mean | AUC |
 | :-: | :----: | :---: | :---: | :--: | :-: |
 | SeG | 0.810 | 0.790 | 0.763 | 0.772 | 0.452 |
-| w/o Gate w/o SAN | 0.810 | 0.790 | 0.763 | 0.772 | 0.452 |
+| PCNN+ATT w/o Gate w/o SAN | 0.810 | 0.790 | 0.763 | 0.772 | 0.452 |
 
 ## Note
 PCNN and SAN **DO NOT** share the same entity-aware embedding layer, and the `lambda` values for PCNN and SAN are 0.05 and 1.0 respectively (confirmed by the authors).
