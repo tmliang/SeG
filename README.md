@@ -18,6 +18,8 @@ python main.py
 
 ## Experimental Result
 
+The results show that the main contribution comes from the entity-aware embedding.
+
 |Model| P@100  | P@200 | P@300 | Mean | AUC |
 | :- | :----: | :---: | :---: | :--: | :-: |
 | SeG | 0.810 | 0.790 | 0.763 | 0.772 | 0.452 |
