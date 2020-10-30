@@ -19,14 +19,14 @@ class Dataset(data.Dataset):
                 line_data = {
                     "ent1": {"id": line[0], "name": line[2]},
                     "ent2": {"id": line[1], "name": line[3]},
-                    "rel": line[4],
+                    "rel": self.rel2id[line[4]] if line[4] in self.rel2id else self.rel2id['NA'],
                     "words": line[5:-1]
                 }
                 ori_data.append(line_data)
         print("Finish loading")
         # Sort data by entities and relations
         print("Sort data...")
-        ori_data.sort(key=lambda a: a['ent1']['id'] + '#' + a['ent2']['id'] + '#' + a['rel'])
+        ori_data.sort(key=lambda a: a['ent1']['id'] + '#' + a['ent2']['id'] + '#' + str(a['rel']))
         print("Finish sorting")
         # Pre-process data
         print("Pre-processing data...")
@@ -48,7 +48,7 @@ class Dataset(data.Dataset):
             else:
                 cur_bag = (ins['ent1']['id'], ins['ent2']['id'])  # used for test
 
-            if cur_bag != last_bag or len(bag['rel']) >= self.max_bag_size:
+            if cur_bag != last_bag:
                 if last_bag is not None:
                     self.data.append(bag)
                     bag = {
@@ -64,8 +64,7 @@ class Dataset(data.Dataset):
                 last_bag = cur_bag
 
             # rel
-            _rel = self.rel2id[ins['rel']] if ins['rel'] in self.rel2id else self.rel2id['NA']
-            bag['rel'].append(_rel)
+            bag['rel'].append(ins['rel'])
 
             # word
             words = ins['words']
@@ -77,14 +76,14 @@ class Dataset(data.Dataset):
             # ent
             ent1 = ins['ent1']['name']
             ent2 = ins['ent2']['name']
-            _ent1 = self.word2id[ent1] if ent1  in self.word2id else self.word2id['[UNK]']
-            _ent2 = self.word2id[ent2] if ent2  in self.word2id else self.word2id['[UNK]']
+            _ent1 = self.word2id[ent1] if ent1 in self.word2id else self.word2id['[UNK]']
+            _ent2 = self.word2id[ent2] if ent2 in self.word2id else self.word2id['[UNK]']
             bag['ent1'].append(_ent1)
             bag['ent2'].append(_ent2)
 
             # pos
-            p1 = words.index(ent1) if ent1  in words else 0
-            p2 = words.index(ent2) if ent2  in words else 0
+            p1 = words.index(ent1) if ent1 in words else 0
+            p2 = words.index(ent2) if ent2 in words else 0
             p1 = p1 if p1 < self.max_length else self.max_length - 1
             p2 = p2 if p2 < self.max_length else self.max_length - 1
             _pos1 = np.arange(self.max_length) - p1 + self.max_pos_length
@@ -130,7 +129,6 @@ class Dataset(data.Dataset):
         self.max_length = opt['max_length']
         self.max_pos_length = opt['max_pos_length']
         self.training = training
-        self.max_bag_size = opt['max_bag_size']
         self.vec_save_dir = os.path.join(self.processed_data_dir, 'word_vec.npy')
         self.word2id_save_dir = os.path.join(self.processed_data_dir, 'word2id.json')
         self.init_rel()
@@ -151,6 +149,7 @@ class Dataset(data.Dataset):
         except:
             print("Processed data does not exist")
             self._preprocess()
+        print("bag num:", self.__len__())
 
     def __len__(self):
         return len(self.data)
@@ -163,6 +162,7 @@ class Dataset(data.Dataset):
         ent1 = torch.tensor(bag['ent1'],  dtype=torch.long)
         ent2 = torch.tensor(bag['ent2'],  dtype=torch.long)
         mask = torch.tensor(bag['mask'], dtype=torch.long)
+        length = torch.tensor(bag['length'], dtype=torch.long)
         rel = torch.tensor(bag['rel'],  dtype=torch.long)
         if self.training:
             rel = rel[0]
@@ -171,7 +171,7 @@ class Dataset(data.Dataset):
             for i in set(rel):
                 rel_mul[i] = 1
             rel = rel_mul
-        return word, pos1, pos2, ent1 , ent2 , mask, rel
+        return word, pos1, pos2, ent1, ent2, mask, length, rel
 
     def init_word(self):
         f = open(self.vec_dir)
@@ -181,7 +181,7 @@ class Dataset(data.Dataset):
         for line in f.readlines():
             line = line.strip().split()
             word_vec[len(self.word2id)] = np.array(line[1:])
-            self.word2id[line[0]] = len(self.word2id)
+            self.word2id[line[0].lower()] = len(self.word2id)
         f.close()
         word_vec[len(self.word2id)] = np.random.randn(dim) / np.sqrt(dim)
         self.word2id['[UNK]'] = len(self.word2id)
@@ -216,7 +216,7 @@ class Dataset(data.Dataset):
 
 def collate_fn(X):
     X = list(zip(*X))
-    word, pos1, pos2, ent1, ent2, mask, rel = X
+    word, pos1, pos2, ent1, ent2, mask, length, rel = X
     scope = []
     ind = 0
     for w in word:
@@ -229,8 +229,9 @@ def collate_fn(X):
     mask = torch.cat(mask, 0)
     ent1 = torch.cat(ent1, 0)
     ent2 = torch.cat(ent2, 0)
+    length = torch.cat(length, 0)
     rel = torch.stack(rel)
-    return word, pos1, pos2, ent1, ent2, mask, scope, rel
+    return word, pos1, pos2, ent1, ent2, mask, length, scope, rel
 
 
 def data_loader(data_file, opt, shuffle, training=True, num_workers=4):
