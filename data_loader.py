@@ -133,9 +133,12 @@ class Dataset(data.Dataset):
         self.word2id_save_dir = os.path.join(self.processed_data_dir, 'word2id.json')
         self.init_rel()
 
-        if not os.path.exists(self.processed_data_dir):
-            os.mkdir(os.path.join(self.processed_data_dir))
+        if not os.path.exists(opt['save_dir']):
+            os.mkdir(opt['save_dir'])
 
+        if not os.path.exists(self.processed_data_dir):
+            os.mkdir(self.processed_data_dir)
+            
         if os.path.exists(self.vec_save_dir) and os.path.exists(self.word2id_save_dir):
             self.word2id = json.load(open(self.word2id_save_dir))
         else:

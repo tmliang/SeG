@@ -20,6 +20,7 @@ def train(train_loader, test_loader, opt):
     optimizer = optim.SGD(model.parameters(), lr=opt['lr'], weight_decay=1e-5)
     not_best_count = 0
     best_auc = 0
+    ckpt = os.path.join(opt['save_dir'], 'model.pth.tar')
     for epoch in range(opt['epoch']):
         model.train()
         print("\n=== Epoch %d train ===" % epoch)
@@ -103,8 +104,9 @@ def valid(test_loader, model):
 def test(test_loader):
     print("\n=== Test ===")
     # Load model
-    save_dir = os.path.join(opt['save_dir'], opt['encoder'])
-    model = Model(test_loader.dataset.vec_save_dir, test_loader.dataset.rel_num(), opt)
+    save_dir = opt['save_dir']
+    model = SeG(test_loader.dataset.vec_save_dir, test_loader.dataset.rel_num(),
+                lambda_pcnn=opt['lambda_pcnn'], lambda_san=opt['lambda_san'])
     if torch.cuda.is_available():
         model = model.cuda()
     state_dict = torch.load(os.path.join(save_dir, 'model.pth.tar'))['state_dict']

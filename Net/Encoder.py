@@ -23,7 +23,7 @@ class PCNN(nn.Module):
         nn.init.zeros_(self.fc2.bias)
 
     def forward(self, Xp, Xe, X_mask):
-        A = torch.sigmoid(self.lam * (self.fc1(Xe)))
+        A = torch.sigmoid((self.fc1(Xe / self.lam)))
         X = A * Xe + (1 - A) * torch.tanh(self.fc2(Xp))
         X = self.cnn(X.transpose(1, 2)).transpose(1, 2)
         X = self.pool(X, X_mask)
@@ -58,7 +58,7 @@ class SAN(nn.Module):
 
     def forward(self, Xp, Xe):
         # embedding
-        A = torch.sigmoid(self.lam * (self.fc1(Xe)))
+        A = torch.sigmoid((self.fc1(Xe / self.lam)))
         X = A * Xe + (1 - A) * torch.tanh(self.fc2(Xp))
         # encoder
         A = self.fc2_att(torch.tanh(self.fc1_att(X)))
